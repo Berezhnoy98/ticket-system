@@ -1,0 +1,290 @@
+.ticket-detail-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.ticket-header {
+  background: white;
+  padding: 35px;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ticket-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #007bff, #0056b3);
+}
+
+.ticket-header h1 {
+  margin-bottom: 20px;
+  color: #2c3e50;
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.ticket-meta {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+}
+
+.ticket-meta span {
+  padding: 8px 16px;
+  background-color: #f8f9fa;
+  border-radius: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.department::before {
+  content: "🏢";
+}
+
+.status::before {
+  content: "📊";
+}
+
+.date::before {
+  content: "📅";
+}
+
+.ticket-content {
+  background: white;
+  padding: 35px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2px;
+}
+
+.ticket-description {
+  margin-bottom: 30px;
+}
+
+.ticket-description h3 {
+  margin-bottom: 15px;
+  color: #2c3e50;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.ticket-description p {
+  color: #555;
+  line-height: 1.6;
+  font-size: 1.05rem;
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid #007bff;
+}
+
+.ticket-author {
+  padding: 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 8px;
+  font-style: italic;
+  color: #495057;
+  border: 1px solid #e9ecef;
+}
+
+.ticket-author strong {
+  color: #2c3e50;
+}
+
+.admin-controls {
+  margin-top: 35px;
+  padding-top: 25px;
+  border-top: 2px solid #e9ecef;
+}
+
+.admin-controls h3 {
+  margin-bottom: 20px;
+  color: #2c3e50;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.status-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.status-buttons button {
+  padding: 12px 20px;
+  font-size: 0.9rem;
+  border: 2px solid #e9ecef;
+  background: white;
+  color: #495057;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.3s;
+  flex: 1;
+  min-width: 120px;
+}
+
+.status-buttons button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.status-buttons button.active {
+  border-color: #007bff;
+  background-color: #007bff;
+  color: white;
+}
+
+.status-buttons button:nth-child(1):not(.active):hover { border-color: #1976d2; color: #1976d2; }
+.status-buttons button:nth-child(2):not(.active):hover { border-color: #f57c00; color: #f57c00; }
+.status-buttons button:nth-child(3):not(.active):hover { border-color: #2e7d32; color: #2e7d32; }
+.status-buttons button:nth-child(4):not(.active):hover { border-color: #666; color: #666; }
+
+.comments-section {
+  background: white;
+  padding: 35px;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.comments-section h3 {
+  margin-bottom: 25px;
+  color: #2c3e50;
+  font-size: 1.4rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.comments-section h3::before {
+  content: "💬";
+  font-size: 1.2rem;
+}
+
+.comments-list {
+  margin-bottom: 35px;
+}
+
+.comment {
+  padding: 25px;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  background-color: white;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.comment:hover {
+  border-color: #007bff;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.1);
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.comment-header strong {
+  color: #2c3e50;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.comment-header strong::before {
+  content: "👤";
+  font-size: 0.9rem;
+}
+
+.comment-date {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.comment-content {
+  color: #495057;
+  line-height: 1.6;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.add-comment-form {
+  background-color: #f8f9fa;
+  padding: 25px;
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+}
+
+.add-comment-form textarea {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-bottom: 18px;
+  resize: vertical;
+  min-height: 120px;
+  font-family: inherit;
+  transition: all 0.3s;
+  background-color: white;
+}
+
+.add-comment-form textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.add-comment-form button {
+  padding: 14px 28px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ticket-header,
+  .ticket-content,
+  .comments-section {
+    padding: 25px 20px;
+  }
+  
+  .ticket-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .ticket-meta {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .status-buttons {
+    flex-direction: column;
+  }
+  
+  .status-buttons button {
+    min-width: auto;
+  }
+  
+  .comment-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

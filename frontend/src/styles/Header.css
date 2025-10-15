@@ -1,0 +1,103 @@
+.header {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  color: white;
+  padding: 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  height: 70px;
+}
+
+.logo a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo a::before {
+  content: "📋";
+  font-size: 1.3rem;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav a {
+  color: white;
+  text-decoration: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.nav a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav a.active {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.admin-badge {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.logout-btn {
+  background-color: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 8px 16px;
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+.logout-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Mobile menu */
+@media (max-width: 768px) {
+  .header .container {
+    flex-direction: column;
+    height: auto;
+    padding: 15px 20px;
+  }
+  
+  .logo {
+    margin-bottom: 15px;
+  }
+  
+  .nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .nav a {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}
