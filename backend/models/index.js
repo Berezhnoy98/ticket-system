@@ -1,120 +1,53 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const jwt = require('jsonwebtoken');
+const { User } = require('../models');
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
-const User = sequelize.define('User', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  email: {
-    type: DataTypes.STRING,
-    unique: true,
-    allowNull: false,
-    validate: {
-      isEmail: true
+const auth = async (req, res, next) => {
+  try {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+
+    if (!token) {
+      return res.status(401).json({ message: 'Токен отсутствует' });
     }
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  isAdmin: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true
-  }
-});
 
-const Ticket = sequelize.define('Ticket', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  title: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  description: {
-    type: DataTypes.TEXT,
-    allowNull: false
-  },
-  department: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  authorName: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  authorEmail: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      isEmail: true
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const user = await User.findByPk(decoded.userId, {
+      attributes: { exclude: ['password'] }
+    });
+
+    if (!user) {
+      return res.status(401).json({ message: 'Пользователь не найден' });
     }
-  },
-  status: {
-    type: DataTypes.STRING,
-    defaultValue: 'open'
-  }
-}, {
-  indexes: [
-    {
-      fields: ['status']
-    },
-    {
-      fields: ['department']
+
+    req.user = user;
+    next();
+  } catch (error) {
+    console.error('Auth middleware error:', error);
+    
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(401).json({ message: 'Неверный токен' });
     }
-  ]
-});
-
-const Comment = sequelize.define('Comment', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  content: {
-    type: DataTypes.TEXT,
-    allowNull: false
-  },
-  authorName: {
-    type: DataTypes.STRING,
-    allowNull: false
+    
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'Токен истек' });
+    }
+    
+    res.status(500).json({ message: 'Ошибка аутентификации' });
   }
-});
-
-// Associations
-Ticket.hasMany(Comment, { 
-  foreignKey: 'ticketId',
-  onDelete: 'CASCADE'
-});
-Comment.belongsTo(Ticket, { 
-  foreignKey: 'ticketId'
-});
-
-User.hasMany(Ticket, { 
-  foreignKey: 'authorId'
-});
-Ticket.belongsTo(User, { 
-  foreignKey: 'authorId'
-});
-
-User.hasMany(Comment, { 
-  foreignKey: 'authorId'
-});
-Comment.belongsTo(User, { 
-  foreignKey: 'authorId'
-});
-
-module.exports = {
-  User,
-  Ticket,
-  Comment,
-  sequelize
 };
+
+const adminAuth = async (req, res, next) => {
+  try {
+    await auth(req, res, () => {});
+    
+    if (!req.user.isAdmin) {
+      return res.status(403).json({ message: 'Доступ запрещен. Требуются права администратора' });
+    }
+    
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { auth, adminAuth };

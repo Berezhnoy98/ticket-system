@@ -10,7 +10,7 @@ app.use(express.json());
 
 // Logging middleware
 app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()}  ${req.method} ${req.url} - server.js:13`);
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
   next();
 });
 
@@ -18,13 +18,13 @@ app.use((req, res, next) => {
 async function testConnection() {
   try {
     await sequelize.authenticate();
-    console.log('✅ Database connection established successfully. - server.js:21');
+    console.log('✅ Database connection established successfully.');
     
     // Sync database
-    await sequelize.sync();
-    console.log('✅ Database synced successfully. - server.js:25');
+    await sequelize.sync({ alter: true });
+    console.log('✅ Database synced successfully.');
   } catch (error) {
-    console.error('❌ Unable to connect to the database: - server.js:27', error.message);
+    console.error('❌ Unable to connect to the database:', error.message);
   }
 }
 
@@ -49,7 +49,7 @@ app.get('/api/health', (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error('Error: - server.js:52', err);
+  console.error('Error:', err);
   res.status(500).json({ 
     message: 'Internal server error',
     error: process.env.NODE_ENV === 'development' ? err.message : {}
@@ -70,9 +70,13 @@ async function startServer() {
   await testConnection();
 
   app.listen(PORT, () => {
-    console.log(`🚀 Server is running on port ${PORT} - server.js:73`);
-    console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'} - server.js:74`);
-    console.log(`🔗 Health check: http://localhost:${PORT}/api/health - server.js:75`);
+    console.log(`🚀 Server is running on port ${PORT}`);
+    console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
+    console.log(`📝 API endpoints:`);
+    console.log(`   GET  http://localhost:${PORT}/api/tickets`);
+    console.log(`   POST http://localhost:${PORT}/api/tickets`);
+    console.log(`   GET  http://localhost:${PORT}/api/tickets/:id`);
   });
 }
 

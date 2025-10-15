@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { User } = require('../models');
+const { User } = require('../models/simple-models');
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
@@ -11,6 +11,8 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    console.log('Login attempt for email:', email);
+
     // Validation
     if (!email || !password) {
       return res.status(400).json({ message: 'Email и пароль обязательны' });
@@ -19,12 +21,14 @@ router.post('/login', async (req, res) => {
     // Find user
     const user = await User.findOne({ where: { email } });
     if (!user) {
+      console.log('User not found:', email);
       return res.status(401).json({ message: 'Неверный email или пароль' });
     }
 
     // Check password
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
+      console.log('Invalid password for user:', email);
       return res.status(401).json({ message: 'Неверный email или пароль' });
     }
 
@@ -39,6 +43,8 @@ router.post('/login', async (req, res) => {
       { expiresIn: '24h' }
     );
 
+    console.log('Login successful for user:', email);
+
     res.json({
       token,
       user: {
@@ -49,7 +55,7 @@ router.post('/login', async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Login error: - auth.js:52', error);
+    console.error('Login error:', error);
     res.status(500).json({ message: 'Ошибка сервера' });
   }
 });
@@ -58,6 +64,8 @@ router.post('/login', async (req, res) => {
 router.post('/register', async (req, res) => {
   try {
     const { email, password, name } = req.body;
+
+    console.log('Register attempt for email:', email);
 
     // Validation
     if (!email || !password || !name) {
@@ -82,6 +90,8 @@ router.post('/register', async (req, res) => {
       isAdmin: true
     });
 
+    console.log('User registered successfully:', email);
+
     res.status(201).json({ 
       message: 'Пользователь создан успешно',
       user: {
@@ -92,15 +102,7 @@ router.post('/register', async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Register error: - auth.js:95', error);
-    
-    if (error.name === 'SequelizeValidationError') {
-      return res.status(400).json({ 
-        message: 'Ошибка валидации',
-        errors: error.errors.map(err => err.message)
-      });
-    }
-    
+    console.error('Register error:', error);
     res.status(500).json({ message: 'Ошибка сервера' });
   }
 });
@@ -125,7 +127,7 @@ router.get('/me', async (req, res) => {
 
     res.json({ user });
   } catch (error) {
-    console.error('Get user error: - auth.js:128', error);
+    console.error('Get user error:', error);
     res.status(401).json({ message: 'Неверный токен' });
   }
 });

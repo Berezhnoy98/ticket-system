@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { User } = require('../models');
+const { User } = require('../models/simple-models');
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 const auth = async (req, res, next) => {
@@ -22,7 +22,7 @@ const auth = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    console.error('Auth middleware error: - auth.js:25', error);
+    console.error('Auth middleware error:', error);
     
     if (error.name === 'JsonWebTokenError') {
       return res.status(401).json({ message: 'Неверный токен' });
